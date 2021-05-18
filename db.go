@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"time"
+
+	_ "github.com/go-sql-driver/mysql" //import driver
 )
 
 //NewDBClient to create new connection
