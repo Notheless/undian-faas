@@ -37,13 +37,29 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Fprint(w, html.EscapeString(dok.NamaFile))
 	case http.MethodGet:
+		db, err := NewDBClient()
+		if err != nil {
+			http.Error(w, fmt.Sprint(err), http.StatusBadRequest)
+			return
+		}
 		test := r.URL.Query()
-		cek1 := test.Get("id")
-		fmt.Fprint(w, html.EscapeString(fmt.Sprintf("Get method called with id %s", cek1)))
+		param := test.Get("kategori")
+		result, err := GetListPemenang(r.Context(), db, param)
+		if err != nil {
+			http.Error(w, fmt.Sprint(err), http.StatusBadRequest)
+			return
+		}
+		fmt.Fprint(w, html.EscapeString(ConvertJSON(result)))
 
 	default:
 		fmt.Fprint(w, html.EscapeString(fmt.Sprintf("unsupported method %s ", r.Method)))
 	}
 
 	return
+}
+
+//ConvertJSON function
+func ConvertJSON(in interface{}) string {
+	data, _ := json.Marshal(in)
+	return string(data)
 }
