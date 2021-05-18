@@ -10,9 +10,8 @@ import (
 	"net/http"
 )
 
-// HelloWorld prints the JSON encoded "message" field in the body
-// of the request or "Hello, World!" if there isn't one.
-func HelloWorld(w http.ResponseWriter, r *http.Request) {
+//EntryPoint it starts here
+func EntryPoint(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
 	case "POST":
