@@ -1,45 +1,33 @@
 package p
 
 import (
-	"crypto/tls"
-	"crypto/x509"
 	"database/sql"
 	"fmt"
 	"os"
 	"time"
-
-	"github.com/go-sql-driver/mysql"
 )
 
 //NewDBClient to create new connection
 func NewDBClient() (*sql.DB, error) {
+	var (
+		dbUser                 = os.Getenv("DB_USER")                  // e.g. 'my-db-user'
+		dbPwd                  = os.Getenv("DB_PASS")                  // e.g. 'my-db-password'
+		instanceConnectionName = os.Getenv("INSTANCE_CONNECTION_NAME") // e.g. 'project:region:instance'
+		dbName                 = os.Getenv("DB_NAME")                  // e.g. 'my-database'
+	)
 
-	user := os.Getenv("DB_USER")
-	pass := os.Getenv("DB_PASS")
-	ip := os.Getenv("DB_IP")
-	rootCert := os.Getenv("DB_CERT_KEY")
-	clientCert := os.Getenv("DB_CLIENT_CERT")
-	serverName := os.Getenv("DB_SDERVER_NAME")
+	socketDir, isSet := os.LookupEnv("DB_SOCKET_DIR")
+	if !isSet {
+		socketDir = "/cloudsql"
+	}
 
-	rootCertPool := x509.NewCertPool()
-	rootCertPool.AppendCertsFromPEM([]byte(rootCert))
-	clientCertPool := x509.NewCertPool()
-	clientCertPool.AppendCertsFromPEM([]byte(clientCert))
+	var dbURI string
+	dbURI = fmt.Sprintf("%s:%s@unix(/%s/%s)/%s?parseTime=true", dbUser, dbPwd, socketDir, instanceConnectionName, dbName)
 
-	// rootCertPool := x509.NewCertPool()
-	// if ok := rootCertPool.AppendCeratsFromPEM([]byte(pem)); !ok {
-	// 	log.Fatal("Failed to append PEM.", user, pass, ip, pem)
-	// }
-	mysql.RegisterTLSConfig("custom", &tls.Config{
-		RootCAs:    rootCertPool,
-		ClientCAs:  clientCertPool,
-		ServerName: serverName,
-	})
-
-	connstring := fmt.Sprintf("%s:%s@(%s:3306)/default?tls=custom", user, pass, ip)
-	db, err := sql.Open("mysql", connstring)
+	// dbPool is the pool of database connections.
+	db, err := sql.Open("mysql", dbURI)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("sql.Open: %v", err)
 	}
 	// See "Important settings" section.
 	db.SetConnMaxLifetime(time.Minute * 3)

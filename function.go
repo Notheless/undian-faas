@@ -50,6 +50,7 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		fmt.Fprint(w, html.EscapeString(ConvertJSON(result)))
+		return
 
 	default:
 		fmt.Fprint(w, html.EscapeString(fmt.Sprintf("unsupported method %s ", r.Method)))
