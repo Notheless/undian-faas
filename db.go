@@ -22,7 +22,7 @@ func NewDBClient() (*sql.DB, error) {
 
 	rootCertPool := x509.NewCertPool()
 	if ok := rootCertPool.AppendCertsFromPEM([]byte(pem)); !ok {
-		log.Fatal("Failed to append PEM.")
+		log.Fatal("Failed to append PEM.", user, pass, ip, pem)
 	}
 	mysql.RegisterTLSConfig("custom", &tls.Config{
 		RootCAs: rootCertPool,
