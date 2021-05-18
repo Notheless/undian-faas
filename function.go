@@ -49,7 +49,7 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, fmt.Sprint(err), http.StatusBadRequest)
 			return
 		}
-		fmt.Fprint(w, html.EscapeString(ConvertJSON(result)))
+		fmt.Fprint(w, ConvertJSON(result))
 		return
 
 	default:
