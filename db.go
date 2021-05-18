@@ -36,7 +36,7 @@ func NewDBClient() (*sql.DB, error) {
 		ServerName: serverName,
 	})
 
-	connstring := fmt.Sprintf("%s:%s@%s/default?tls=custom", user, pass, ip)
+	connstring := fmt.Sprintf("%s:%s@(%s:3306)/default?tls=custom", user, pass, ip)
 	db, err := sql.Open("mysql", connstring)
 	if err != nil {
 		return nil, err
