@@ -4,7 +4,6 @@ package p
 import (
 	"encoding/json"
 	"fmt"
-	"html"
 	"net/http"
 )
 
@@ -13,11 +12,12 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 	ext := NewHttpx(w, r)
 	switch r.Method {
 	case http.MethodPost:
-		var dok struct {
-			Base64   string `json:"file"`
-			NamaFile string `json:"namafile"`
+		db, err := NewDBClient()
+		if err != nil {
+			ext.ReturnError(err)
+			return
 		}
-
+		dok := &Dokumen{}
 		if err := json.NewDecoder(r.Body).Decode(&dok); err != nil {
 			ext.ReturnError(err)
 			return
@@ -26,7 +26,11 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 			ext.ReturnError(err)
 			return
 		}
-		fmt.Fprint(w, html.EscapeString(dok.NamaFile))
+		if err := ProcessExcel(r.Context(), db, dok.Base64); err != nil {
+			ext.ReturnError(err)
+			return
+		}
+		ext.ReturnText("OK")
 	case http.MethodGet:
 		db, err := NewDBClient()
 		if err != nil {
@@ -43,9 +47,18 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 		ext.ReturnJSON(result)
 		return
 
+	case http.MethodPut:
+		ext.ReturnError(fmt.Errorf("Under development"))
+
 	default:
-		fmt.Fprint(w, html.EscapeString(fmt.Sprintf("unsupported method %s ", r.Method)))
+		ext.ReturnError(fmt.Errorf("Method %s is implemented yet", r.Method))
 	}
 
 	return
+}
+
+//Dokumen struk
+type Dokumen struct {
+	Base64   string `json:"file"`
+	NamaFile string `json:"namafile"`
 }

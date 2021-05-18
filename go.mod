@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	cloud.google.com/go/storage v1.15.0 // indirect
+	github.com/360EntSecGroup-Skylar/excelize v1.4.1
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616 // indirect

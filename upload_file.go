@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"time"
 
 	"cloud.google.com/go/storage"
 )
@@ -24,9 +25,9 @@ func UploadFile(FileBase64 string, NamaFile string) error {
 		return fmt.Errorf("storage.NewClient: %v", err)
 	}
 	defer client.Close()
-
+	timeExtension := time.Now().Format("20060102_030405_")
 	// create writer and write to google cloud storage
-	obj := fmt.Sprintf("test-upload/%s", NamaFile)
+	obj := fmt.Sprintf("test-upload/%s", timeExtension+NamaFile)
 	wc := client.Bucket(gcsBucketName).Object(obj).NewWriter(ctx)
 	if _, err := wc.Write(dec); err != nil {
 		return fmt.Errorf("Writer.Write: %v", err)
