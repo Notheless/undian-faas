@@ -14,7 +14,7 @@ import (
 func EntryPoint(w http.ResponseWriter, r *http.Request) {
 
 	switch r.Method {
-	case "POST":
+	case http.MethodPost:
 		var dok struct {
 			Base64   string `json:"file"`
 			NamaFile string `json:"namafile"`
@@ -36,8 +36,11 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		fmt.Fprint(w, html.EscapeString(dok.NamaFile))
-	case "GET":
-		fmt.Fprint(w, html.EscapeString("Get method called"))
+	case http.MethodGet:
+		test := r.URL.Query()
+		cek1 := test.Get("id")
+		fmt.Fprint(w, html.EscapeString(fmt.Sprintf("Get method called with id %s", cek1)))
+
 	default:
 		fmt.Fprint(w, html.EscapeString(fmt.Sprintf("unsupported method %s ", r.Method)))
 	}
