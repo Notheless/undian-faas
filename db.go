@@ -5,7 +5,6 @@ import (
 	"crypto/x509"
 	"database/sql"
 	"fmt"
-	"log"
 	"os"
 	"time"
 
@@ -18,15 +17,25 @@ func NewDBClient() (*sql.DB, error) {
 	user := os.Getenv("DB_USER")
 	pass := os.Getenv("DB_PASS")
 	ip := os.Getenv("DB_IP")
-	pem := os.Getenv("DB_CERT_KEY")
+	rootCert := os.Getenv("DB_CERT_KEY")
+	clientCert := os.Getenv("DB_CLIENT_CERT")
+	serverName := os.Getenv("DB_SDERVER_NAME")
 
 	rootCertPool := x509.NewCertPool()
-	if ok := rootCertPool.AppendCertsFromPEM([]byte(pem)); !ok {
-		log.Fatal("Failed to append PEM.", user, pass, ip, pem)
-	}
+	rootCertPool.AppendCertsFromPEM([]byte(rootCert))
+	clientCertPool := x509.NewCertPool()
+	clientCertPool.AppendCertsFromPEM([]byte(clientCert))
+
+	// rootCertPool := x509.NewCertPool()
+	// if ok := rootCertPool.AppendCeratsFromPEM([]byte(pem)); !ok {
+	// 	log.Fatal("Failed to append PEM.", user, pass, ip, pem)
+	// }
 	mysql.RegisterTLSConfig("custom", &tls.Config{
-		RootCAs: rootCertPool,
+		RootCAs:    rootCertPool,
+		ClientCAs:  clientCertPool,
+		ServerName: serverName,
 	})
+
 	connstring := fmt.Sprintf("%s:%s@%s/default?tls=custom", user, pass, ip)
 	db, err := sql.Open("mysql", connstring)
 	if err != nil {
