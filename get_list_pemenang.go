@@ -30,7 +30,7 @@ func GetListPemenang(ctx context.Context, db *sql.DB, kategori string) (interfac
 		return result, nil
 	}
 	result := []DaftarPemenang{}
-	rs, err := db.QueryContext(ctx, sql, kategori)
+	rs, err := db.QueryContext(ctx, sql)
 	if err != nil {
 		return nil, err
 	}

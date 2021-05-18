@@ -5,14 +5,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"html"
-	"io"
-	"log"
 	"net/http"
 )
 
 //EntryPoint it starts here
 func EntryPoint(w http.ResponseWriter, r *http.Request) {
-
+	ext := NewHttpx(w, r)
 	switch r.Method {
 	case http.MethodPost:
 		var dok struct {
@@ -21,35 +19,28 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 		}
 
 		if err := json.NewDecoder(r.Body).Decode(&dok); err != nil {
-			switch err {
-			case io.EOF:
-				http.Error(w, "end of file error", http.StatusBadRequest)
-				return
-			default:
-				log.Printf("json.NewDecoder: %v", err)
-				http.Error(w, fmt.Sprint(err), http.StatusBadRequest)
-				return
-			}
+			ext.ReturnError(err)
+			return
 		}
 		if err := UploadFile(dok.Base64, dok.NamaFile); err != nil {
-			http.Error(w, fmt.Sprint(err), http.StatusBadRequest)
+			ext.ReturnError(err)
 			return
 		}
 		fmt.Fprint(w, html.EscapeString(dok.NamaFile))
 	case http.MethodGet:
 		db, err := NewDBClient()
 		if err != nil {
-			http.Error(w, fmt.Sprint(err), http.StatusBadRequest)
+			ext.ReturnError(err)
 			return
 		}
 		test := r.URL.Query()
 		param := test.Get("kategori")
 		result, err := GetListPemenang(r.Context(), db, param)
 		if err != nil {
-			http.Error(w, fmt.Sprint(err), http.StatusBadRequest)
+			ext.ReturnError(err)
 			return
 		}
-		fmt.Fprint(w, ConvertJSON(result))
+		ext.ReturnJSON(result)
 		return
 
 	default:
@@ -57,10 +48,4 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 	}
 
 	return
-}
-
-//ConvertJSON function
-func ConvertJSON(in interface{}) string {
-	data, _ := json.Marshal(in)
-	return string(data)
 }
