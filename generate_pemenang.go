@@ -9,11 +9,13 @@ import (
 
 //GeneratePemenang function
 func GeneratePemenang(ctx context.Context, db *sql.DB) error {
+	logger := CreateLogger(ctx)
 	listKategori := []Kategori{}
 	listNomorUndian := []NomorUndian{}
 	var listArg []interface{}
 	SQLgetKategori := "SELECT id, nama_kategori, maksimal_pemenang FROM kategori_undian;"
 	SQLgetNomor := "SELECT id, nomor_undian FROM `default`.daftar_nomor;"
+	logger.Println("Get list Kategori")
 	rs, err := db.QueryContext(ctx, SQLgetKategori)
 	if err != nil {
 		return err
@@ -28,6 +30,7 @@ func GeneratePemenang(ctx context.Context, db *sql.DB) error {
 		listKategori = append(listKategori, res)
 	}
 
+	logger.Println("Get list nomor")
 	rs, err = db.QueryContext(ctx, SQLgetNomor)
 	if err != nil {
 		return err
@@ -61,6 +64,7 @@ func GeneratePemenang(ctx context.Context, db *sql.DB) error {
 	listVal = listVal[:len(listVal)-1]
 	SQLInsert := fmt.Sprintf("INSERT INTO daftar_pemenang (nomor_undian, kategori) VALUES %s;", listVal)
 
+	logger.Println("Insert Pemenang")
 	_, err = db.QueryContext(ctx, SQLInsert, listArg...)
 	if err != nil {
 		return err

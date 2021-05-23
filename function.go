@@ -2,6 +2,7 @@
 package p
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -13,23 +14,11 @@ import (
 //EntryPoint it starts here
 func EntryPoint(w http.ResponseWriter, r *http.Request) {
 
-	// Sets your Google Cloud Platform project ID.
-	projectID := "bold-camera-314007"
-	ctx := r.Context()
-	// Creates a client.
-	client, err := logging.NewClient(ctx, projectID)
-	if err != nil {
-		log.Fatalf("Failed to create client: %v", err)
-	}
-	defer client.Close()
-	// Sets the name of the log to write to.
-	logName := "my-log"
-
-	logger := client.Logger(logName).StandardLogger(logging.Debug)
-
 	// Logs "hello world", log entry is visible at
 	// Cloud Logs.
 	ext := NewHttpx(w, r)
+	ctx := r.Context()
+	logger := CreateLogger(ctx)
 	switch r.Method {
 	case http.MethodPost:
 		db, err := NewDBClient()
@@ -86,4 +75,22 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 type Dokumen struct {
 	Base64   string `json:"file"`
 	NamaFile string `json:"namafile"`
+}
+
+//CreateLogger func
+func CreateLogger(ctx context.Context) *log.Logger {
+
+	// Sets your Google Cloud Platform project ID.
+	projectID := "bold-camera-314007"
+	// Creates a client.
+	client, err := logging.NewClient(ctx, projectID)
+	if err != nil {
+		log.Fatalf("Failed to create client: %v", err)
+	}
+	defer client.Close()
+	// Sets the name of the log to write to.
+	logName := "my-log"
+
+	logger := client.Logger(logName).StandardLogger(logging.Debug)
+	return logger
 }
