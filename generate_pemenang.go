@@ -50,7 +50,7 @@ func GeneratePemenang(ctx context.Context, db *sql.DB, logger *log.Logger) error
 			logger.Println("BREAK")
 			break
 		}
-		for i := 1; i < katergori.Maksimal && len(listNomorUndian) != 0; i++ {
+		for i := 0; i < katergori.Maksimal && len(listNomorUndian) != 0; i++ {
 			j := rand.Intn(len(listNomorUndian))
 			listArg = append(listArg, listNomorUndian[j].ID)
 			listArg = append(listArg, katergori.ID)
