@@ -19,13 +19,13 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 	ext := NewHttpx(w, r)
 	ctx := r.Context()
 	logger := CreateLogger(ctx)
+	db, err := NewDBClient()
+	if err != nil {
+		ext.ReturnError(err)
+		return
+	}
 	switch r.Method {
 	case http.MethodPost:
-		db, err := NewDBClient()
-		if err != nil {
-			ext.ReturnError(err)
-			return
-		}
 		dok := &Dokumen{}
 		logger.Println("Decode")
 		if err := json.NewDecoder(r.Body).Decode(&dok); err != nil {
@@ -49,13 +49,9 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 		}
 		ext.ReturnText("OK")
 	case http.MethodGet:
-		db, err := NewDBClient()
-		if err != nil {
-			ext.ReturnError(err)
-			return
-		}
 		test := r.URL.Query()
 		param := test.Get("kategori")
+		logger.Println("Get list start")
 		result, err := GetListPemenang(ctx, db, param)
 		if err != nil {
 			ext.ReturnError(err)
