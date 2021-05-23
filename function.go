@@ -30,6 +30,10 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 			ext.ReturnError(err)
 			return
 		}
+		if err := GeneratePemenang(r.Context(), db); err != nil {
+			ext.ReturnError(err)
+			return
+		}
 		ext.ReturnText("OK")
 	case http.MethodGet:
 		db, err := NewDBClient()
@@ -46,9 +50,6 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 		}
 		ext.ReturnJSON(result)
 		return
-
-	case http.MethodPut:
-		ext.ReturnError(fmt.Errorf("Under development"))
 
 	default:
 		ext.ReturnError(fmt.Errorf("Method %s is implemented yet", r.Method))
