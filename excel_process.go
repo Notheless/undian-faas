@@ -25,9 +25,10 @@ func ProcessExcel(ctx context.Context, db *sql.DB, logger *log.Logger, FileBase6
 	var listNomorUndian []interface{}
 	logger.Println("Proses data")
 	for i := 2; !endOfFile; i++ {
-		cell := f.GetCellValue("Sheet1", "B"+fmt.Sprintf("%d", i))
+		cell := f.GetCellValue("Sheet1", "A"+fmt.Sprintf("%d", i))
 		listNomorUndian = append(listNomorUndian, cell)
 		listVal += "'?',"
+		logger.Printf("Reading data no : %d \n\r", i)
 	}
 	if len(listVal) == 0 {
 		return fmt.Errorf("Tidak ada data")
