@@ -21,13 +21,13 @@ func GeneratePemenang(ctx context.Context, db *sql.DB, logger *log.Logger) error
 		return err
 	}
 	for rs.Next() {
-		res := Kategori{}
+		res := &Kategori{}
 		rs.Scan(
 			&res.ID,
 			&res.Nama,
 			&res.Maksimal,
 		)
-		listKategori = append(listKategori, res)
+		listKategori = append(listKategori, *res)
 	}
 
 	logger.Println("Get list nomor")
@@ -36,12 +36,12 @@ func GeneratePemenang(ctx context.Context, db *sql.DB, logger *log.Logger) error
 		return err
 	}
 	for rs1.Next() {
-		res := NomorUndian{}
+		res := &NomorUndian{}
 		rs1.Scan(
 			&res.ID,
 			&res.Nomor,
 		)
-		listNomorUndian = append(listNomorUndian, res)
+		listNomorUndian = append(listNomorUndian, *res)
 	}
 	listVal := ""
 	logger.Printf("Banyak Kategori : %d \n Banyak Nomor : %d", len(listKategori), len(listNomorUndian))
@@ -49,7 +49,7 @@ func GeneratePemenang(ctx context.Context, db *sql.DB, logger *log.Logger) error
 		if len(listNomorUndian) == 0 {
 			break
 		}
-		for i := 1; i < katergori.Maksimal || len(listNomorUndian) == 0; i++ {
+		for i := 1; i < katergori.Maksimal && len(listNomorUndian) != 0; i++ {
 			j := rand.Intn(len(listNomorUndian))
 			listArg = append(listArg, listNomorUndian[j].ID)
 			listArg = append(listArg, katergori.ID)
