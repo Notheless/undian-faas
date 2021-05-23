@@ -54,7 +54,7 @@ func GeneratePemenang(ctx context.Context, db *sql.DB, logger *log.Logger) error
 			listArg = append(listArg, listNomorUndian[j].ID)
 			listArg = append(listArg, katergori.ID)
 			listNomorUndian = remove(listNomorUndian, j)
-			listVal += "('?', '?'),"
+			listVal += "(?, ?),"
 		}
 	}
 

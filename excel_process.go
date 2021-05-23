@@ -29,7 +29,7 @@ func ProcessExcel(ctx context.Context, db *sql.DB, logger *log.Logger, FileBase6
 			break
 		}
 		listNomorUndian = append(listNomorUndian, cell)
-		listVal += "('?'),"
+		listVal += "(?),"
 	}
 	if len(listVal) == 0 {
 		return fmt.Errorf("Tidak ada data")
