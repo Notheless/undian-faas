@@ -38,13 +38,13 @@ func ProcessExcel(ctx context.Context, db *sql.DB, logger *log.Logger, FileBase6
 	listVal = listVal[:len(listVal)-1]
 
 	sqlInsert := fmt.Sprintf(`INSERT INTO daftar_nomor (nomor_undian) VALUES (%s)`, listVal)
-	logger.Println("Delete Nomor")
-	_, err = db.ExecContext(ctx, sqlDeleteNomor)
+	logger.Println("Delete Pemenang")
+	_, err = db.ExecContext(ctx, sqlDeleteDaftar)
 	if err != nil {
 		return err
 	}
-	logger.Println("Delete Pemenang")
-	_, err = db.ExecContext(ctx, sqlDeleteDaftar)
+	logger.Println("Delete Nomor")
+	_, err = db.ExecContext(ctx, sqlDeleteNomor)
 	if err != nil {
 		return err
 	}
