@@ -4,11 +4,31 @@ package p
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+
+	"cloud.google.com/go/logging"
 )
 
 //EntryPoint it starts here
 func EntryPoint(w http.ResponseWriter, r *http.Request) {
+
+	// Sets your Google Cloud Platform project ID.
+	projectID := "bold-camera-314007"
+	ctx := r.Context()
+	// Creates a client.
+	client, err := logging.NewClient(ctx, projectID)
+	if err != nil {
+		log.Fatalf("Failed to create client: %v", err)
+	}
+	defer client.Close()
+	// Sets the name of the log to write to.
+	logName := "my-log"
+
+	logger := client.Logger(logName).StandardLogger(logging.Debug)
+
+	// Logs "hello world", log entry is visible at
+	// Cloud Logs.
 	ext := NewHttpx(w, r)
 	switch r.Method {
 	case http.MethodPost:
@@ -18,19 +38,23 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		dok := &Dokumen{}
+		logger.Println("Decode")
 		if err := json.NewDecoder(r.Body).Decode(&dok); err != nil {
 			ext.ReturnError(err)
 			return
 		}
+		logger.Println("Upload")
 		if err := UploadFile(dok.Base64, dok.NamaFile); err != nil {
 			ext.ReturnError(err)
 			return
 		}
-		if err := ProcessExcel(r.Context(), db, dok.Base64); err != nil {
+		logger.Println("Excel parse")
+		if err := ProcessExcel(ctx, db, dok.Base64); err != nil {
 			ext.ReturnError(err)
 			return
 		}
-		if err := GeneratePemenang(r.Context(), db); err != nil {
+		logger.Println("Update")
+		if err := GeneratePemenang(ctx, db); err != nil {
 			ext.ReturnError(err)
 			return
 		}
@@ -43,7 +67,7 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 		}
 		test := r.URL.Query()
 		param := test.Get("kategori")
-		result, err := GetListPemenang(r.Context(), db, param)
+		result, err := GetListPemenang(ctx, db, param)
 		if err != nil {
 			ext.ReturnError(err)
 			return
