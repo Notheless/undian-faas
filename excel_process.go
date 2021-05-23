@@ -6,13 +6,13 @@ import (
 	"database/sql"
 	"encoding/base64"
 	"fmt"
+	"log"
 
 	"github.com/360EntSecGroup-Skylar/excelize"
 )
 
 //ProcessExcel function
-func ProcessExcel(ctx context.Context, db *sql.DB, FileBase64 string) error {
-	logger := CreateLogger(ctx)
+func ProcessExcel(ctx context.Context, db *sql.DB, logger *log.Logger, FileBase64 string) error {
 	dec, err := base64.StdEncoding.DecodeString(FileBase64)
 	if err != nil {
 		return err

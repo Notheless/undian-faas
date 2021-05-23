@@ -38,12 +38,12 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		logger.Println("Excel parse")
-		if err := ProcessExcel(ctx, db, dok.Base64); err != nil {
+		if err := ProcessExcel(ctx, db, logger, dok.Base64); err != nil {
 			ext.ReturnError(err)
 			return
 		}
 		logger.Println("Update")
-		if err := GeneratePemenang(ctx, db); err != nil {
+		if err := GeneratePemenang(ctx, db, logger); err != nil {
 			ext.ReturnError(err)
 			return
 		}

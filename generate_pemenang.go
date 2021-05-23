@@ -4,12 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
 	"math/rand"
 )
 
 //GeneratePemenang function
-func GeneratePemenang(ctx context.Context, db *sql.DB) error {
-	logger := CreateLogger(ctx)
+func GeneratePemenang(ctx context.Context, db *sql.DB, logger *log.Logger) error {
 	listKategori := []Kategori{}
 	listNomorUndian := []NomorUndian{}
 	var listArg []interface{}
