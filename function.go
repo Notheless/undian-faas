@@ -2,7 +2,6 @@
 package p
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -18,7 +17,18 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 	// Cloud Logs.
 	ext := NewHttpx(w, r)
 	ctx := r.Context()
-	logger := CreateLogger(ctx)
+	// Sets your Google Cloud Platform project ID.
+	projectID := "bold-camera-314007"
+	// Creates a client.
+	client, err := logging.NewClient(ctx, projectID)
+	if err != nil {
+		log.Fatalf("Failed to create client: %v", err)
+	}
+	defer client.Close()
+	// Sets the name of the log to write to.
+	logName := "my-log"
+
+	logger := client.Logger(logName).StandardLogger(logging.Debug)
 	db, err := NewDBClient()
 	if err != nil {
 		ext.ReturnError(err)
@@ -71,22 +81,4 @@ func EntryPoint(w http.ResponseWriter, r *http.Request) {
 type Dokumen struct {
 	Base64   string `json:"file"`
 	NamaFile string `json:"namafile"`
-}
-
-//CreateLogger func
-func CreateLogger(ctx context.Context) *log.Logger {
-
-	// Sets your Google Cloud Platform project ID.
-	projectID := "bold-camera-314007"
-	// Creates a client.
-	client, err := logging.NewClient(ctx, projectID)
-	if err != nil {
-		log.Fatalf("Failed to create client: %v", err)
-	}
-	defer client.Close()
-	// Sets the name of the log to write to.
-	logName := "my-log"
-
-	logger := client.Logger(logName).StandardLogger(logging.Debug)
-	return logger
 }
