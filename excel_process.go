@@ -21,14 +21,15 @@ func ProcessExcel(ctx context.Context, db *sql.DB, logger *log.Logger, FileBase6
 	sqlDeleteDaftar := "DELETE FROM daftar_pemenang;"
 	listVal := ""
 	f, _ := excelize.OpenReader(bytes.NewReader(dec))
-	endOfFile := false
 	var listNomorUndian []interface{}
 	logger.Println("Proses data")
-	for i := 2; !endOfFile; i++ {
+	for i := 2; false; i++ {
 		cell := f.GetCellValue("Sheet1", "A"+fmt.Sprintf("%d", i))
+		if cell == "" {
+			break
+		}
 		listNomorUndian = append(listNomorUndian, cell)
 		listVal += "'?',"
-		logger.Printf("Reading data no : %d \n\r", i)
 	}
 	if len(listVal) == 0 {
 		return fmt.Errorf("Tidak ada data")
