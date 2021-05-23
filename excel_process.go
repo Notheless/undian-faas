@@ -29,7 +29,7 @@ func ProcessExcel(ctx context.Context, db *sql.DB, logger *log.Logger, FileBase6
 			break
 		}
 		listNomorUndian = append(listNomorUndian, cell)
-		listVal += "'?',"
+		listVal += "('?'),"
 	}
 	if len(listVal) == 0 {
 		return fmt.Errorf("Tidak ada data")
@@ -37,7 +37,7 @@ func ProcessExcel(ctx context.Context, db *sql.DB, logger *log.Logger, FileBase6
 	logger.Println("Selesai Proses data")
 	listVal = listVal[:len(listVal)-1]
 
-	sqlInsert := fmt.Sprintf(`INSERT INTO daftar_nomor (nomor_undian) VALUES (%s)`, listVal)
+	sqlInsert := fmt.Sprintf(`INSERT INTO daftar_nomor (nomor_undian) VALUES %s`, listVal)
 	logger.Println("Delete Pemenang")
 	_, err = db.ExecContext(ctx, sqlDeleteDaftar)
 	if err != nil {
