@@ -47,15 +47,19 @@ func GeneratePemenang(ctx context.Context, db *sql.DB, logger *log.Logger) error
 	logger.Printf("Banyak Kategori : %d \n Banyak Nomor : %d", len(listKategori), len(listNomorUndian))
 	for _, katergori := range listKategori {
 		if len(listNomorUndian) == 0 {
+			logger.Println("BREAK")
 			break
 		}
 		for i := 1; i < katergori.Maksimal && len(listNomorUndian) != 0; i++ {
 			j := rand.Intn(len(listNomorUndian))
 			listArg = append(listArg, listNomorUndian[j].ID)
 			listArg = append(listArg, katergori.ID)
+			logger.Println("Remove")
 			listNomorUndian = remove(listNomorUndian, j)
+			logger.Println("Removed")
 			listVal += "(?, ?),"
 		}
+		logger.Printf("katergori.Maksimal : %d", katergori.Maksimal)
 	}
 
 	if len(listVal) == 0 {
