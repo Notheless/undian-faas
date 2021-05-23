@@ -31,20 +31,20 @@ func GeneratePemenang(ctx context.Context, db *sql.DB, logger *log.Logger) error
 	}
 
 	logger.Println("Get list nomor")
-	rs, err = db.QueryContext(ctx, SQLgetNomor)
+	rs1, err := db.QueryContext(ctx, SQLgetNomor)
 	if err != nil {
 		return err
 	}
-	for rs.Next() {
+	for rs1.Next() {
 		res := NomorUndian{}
-		rs.Scan(
+		rs1.Scan(
 			&res.ID,
 			&res.Nomor,
 		)
 		listNomorUndian = append(listNomorUndian, res)
 	}
 	listVal := ""
-
+	logger.Printf("Banyak Kategori : %d \n Banyak Nomor : %d", len(listKategori), len(listNomorUndian))
 	for _, katergori := range listKategori {
 		if len(listNomorUndian) == 0 {
 			break
