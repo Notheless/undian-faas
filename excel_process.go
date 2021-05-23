@@ -23,7 +23,7 @@ func ProcessExcel(ctx context.Context, db *sql.DB, logger *log.Logger, FileBase6
 	f, _ := excelize.OpenReader(bytes.NewReader(dec))
 	var listNomorUndian []interface{}
 	logger.Println("Proses data")
-	for i := 2; false; i++ {
+	for i := 2; true; i++ {
 		cell := f.GetCellValue("Sheet1", "A"+fmt.Sprintf("%d", i))
 		if cell == "" {
 			break
