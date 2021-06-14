@@ -1,24 +1,22 @@
-FROM golang:latest
+FROM alpine:latest as os
 
-RUN apk add --no-cache git
+FROM golang:1.14-alpine AS build
 
-# Set the Current Working Directory inside the container
-WORKDIR /app/go-sample-app
+RUN apk update && apk add --no-cache git ca-certificates && update-ca-certificates
+WORKDIR /app/src/api
+COPY ./api/go.mod .
+COPY ./api/go.sum .
 
-# We want to populate the module cache based on the go.{mod,sum} files.
-COPY go.mod .
-COPY go.sum .
+RUN go mod tidy -v
+RUN go mod download -x
 
-RUN go mod download
+COPY ./api/. .
 
-COPY . .
+RUN rm .env
+RUN  CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app
+RUN rm -rf /app/src
 
-# Build the Go app
-RUN go build -o ./out/go-sample-app .
-
-
-# This container exposes port 8080 to the outside world
-EXPOSE 8080
-
-# Run the binary program produced by `go install`
-CMD ["./out/go-sample-app"]
+FROM os
+WORKDIR /app
+COPY --from=build /app .
+ENTRYPOINT ["./api"]
