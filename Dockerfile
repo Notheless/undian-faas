@@ -1,4 +1,6 @@
 FROM golang:1.8-alpine
+
+WORKDIR /app/src/api
 ADD . /go/src/api
 RUN go install api
 
