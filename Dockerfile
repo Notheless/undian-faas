@@ -1,7 +1,7 @@
 
 FROM alpine:latest as os
 FROM golang:1.14-alpine AS build
-RUN apk update && apk add --no-cache git ca-certificates && update-ca-certificates
+#RUN apk update && apk add --no-cache git ca-certificates && update-ca-certificates
 ENV GO111MODULE=auto
 
 WORKDIR /app/src/api
