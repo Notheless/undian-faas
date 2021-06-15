@@ -20,6 +20,7 @@ RUN rm -rf /app/src
 FROM os
 WORKDIR /app
 COPY --from=build /app .
-ENTRYPOINT ["./api"]
+#ENTRYPOINT ["./api"]
 
 EXPOSE 8080
+RUN /app
