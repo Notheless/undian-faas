@@ -23,4 +23,4 @@ COPY --from=build /app .
 #ENTRYPOINT ["./api"]
 
 EXPOSE 8080
-RUN echo $(ls -1 ./main)
+RUN echo $(ls -R ./main)
