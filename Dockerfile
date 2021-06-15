@@ -13,14 +13,7 @@ RUN go mod download -x
 
 COPY ./api/. .
 
-RUN rm .env
-RUN  CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app
-RUN rm -rf /app/src
+RUN  CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./app
 
-FROM os
-WORKDIR /app
-COPY --from=build /app .
-#ENTRYPOINT ["./api"]
-
+RUN app
 EXPOSE 8080
-RUN echo $(ls -R ./main)
