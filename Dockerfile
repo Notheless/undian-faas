@@ -24,6 +24,7 @@ FROM golang:1.14-alpine
 ## We create an /app directory within our
 ## image that will hold our application source
 ## files
+RUN rm [".env"]
 RUN mkdir /app
 ## We copy everything in the root directory
 ## into our /app directory
