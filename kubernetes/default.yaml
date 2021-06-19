@@ -214,6 +214,21 @@ spec:
                 configMapKeyRef:
                   key: DB_NAME
                   name: undian-config-xjo2
+            - name: APP_MODE
+              valueFrom:
+                configMapKeyRef:
+                  key: APP_MODE
+                  name: undian-config-xjo2
+            - name: APP_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: APP_PORT
+                  name: undian-config-xjo2
+            - name: SECRET_KEY
+              valueFrom:
+                configMapKeyRef:
+                  key: SECRET_KEY
+                  name: undian-config-xjo2
           image: gcr.io/bold-camera-314007/github.com/notheless/undian-faas
           imagePullPolicy: IfNotPresent
           name: undian-faas-sha256-1
