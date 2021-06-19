@@ -24,7 +24,6 @@ FROM golang:1.14-alpine
 ## We create an /app directory within our
 ## image that will hold our application source
 ## files
-RUN rm [".env"]
 RUN mkdir /app
 ## We copy everything in the root directory
 ## into our /app directory
@@ -36,6 +35,7 @@ WORKDIR /app
 ## we run go build to compile the binary
 ## executable of our Go program
 RUN go build -o main .
+RUN rm [".env"]
 ## Our start command which kicks off
 ## our newly created binary executable
 CMD ["/app/main"]
