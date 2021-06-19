@@ -34,8 +34,8 @@ ADD . /app
 WORKDIR /app
 ## we run go build to compile the binary
 ## executable of our Go program
+RUN rm .env
 RUN go build -o main .
-RUN rm [".env"]
 ## Our start command which kicks off
 ## our newly created binary executable
 CMD ["/app/main"]
