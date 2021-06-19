@@ -57,7 +57,7 @@ func (s *service) GeneratePemenang(ctx context.Context, zona string, kategori st
 	InsertSQL := fmt.Sprintf("INSERT INTO pemenang (tiket, kategori, zona) VALUES %s;", listVal)
 
 	//delete pemenang lama
-	DeleteSQL := "DELETE FROM pemenang WHERE kategori = ? AND zona = ?"
+	DeleteSQL := "UPDATE pemenang SET deleted = true WHERE kategori = ? AND zona = ?"
 	_, err = s.db.ExecContext(ctx, DeleteSQL, kategori, zona)
 	if err != nil {
 		return nil, err

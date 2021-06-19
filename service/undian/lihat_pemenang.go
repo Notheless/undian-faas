@@ -12,7 +12,7 @@ func (s *service) LihatPemenang(ctx context.Context, zona string, kategori strin
 	FROM pemenang p 
 	JOIN tiket t ON p.tiket = t.nomor 
 	JOIN toko tk ON t.toko_id = tk.id 
-	WHERE p.zona = ? AND p.kategori = ?`
+	WHERE p.zona = ? AND p.kategori = ? AND p.deleted = 0`
 
 	rs, err := s.db.QueryContext(ctx, sql, zona, kategori)
 	if err != nil {
