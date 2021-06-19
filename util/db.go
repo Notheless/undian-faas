@@ -24,7 +24,7 @@ func NewDBClient() (*sql.DB, error) {
 	}
 
 	var dbURI string
-	dbURI = fmt.Sprintf("%s:%s@unix(/%s/%s)/%s?parseTime=true", dbUser, dbPwd, socketDir, instanceConnectionName, dbName)
+	dbURI = fmt.Sprintf("%s:%s@unix(%s/%s)/%s?parseTime=true", dbUser, dbPwd, socketDir, instanceConnectionName, dbName)
 	if os.Getenv("APP_MODE") == "DEBUG" {
 		dbURI = os.Getenv("CONNECTION_STRING")
 	}
