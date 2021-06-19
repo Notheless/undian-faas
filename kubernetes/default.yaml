@@ -229,6 +229,11 @@ spec:
                 configMapKeyRef:
                   key: SECRET_KEY
                   name: undian-config-xjo2
+            - name: CONNECTION_STRING
+              valueFrom:
+                configMapKeyRef:
+                  key: CONNECTION_STRING
+                  name: undian-config-xjo2
           image: gcr.io/bold-camera-314007/github.com/notheless/undian-faas
           imagePullPolicy: IfNotPresent
           name: undian-faas-sha256-1
