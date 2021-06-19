@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: undian
+    app: undian-faas
   managedFields:
     - apiVersion: apps/v1
       fieldsType: FieldsV1
@@ -155,13 +155,13 @@ metadata:
       manager: kube-controller-manager
       operation: Update
       time: '2021-06-15T03:50:53Z'
-  name: undian
+  name: undian-faas
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: undian
+      app: undian-faas
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -170,7 +170,7 @@ spec:
   template:
     metadata:
       labels:
-        app: undian
+        app: undian-faas
     spec:
       containers:
         - env:
@@ -222,7 +222,7 @@ apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
   labels:
-    app: undian
+    app: undian-faas
   managedFields:
     - apiVersion: autoscaling/v2beta1
       fieldsType: FieldsV1
@@ -267,4 +267,4 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: undian
+    name: undian-faas
