@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 )
@@ -63,4 +64,13 @@ func (h *HTTPHandler) QueryValue(key string) string {
 func (h *HTTPHandler) BodyParse(b interface{}) error {
 	decoder := json.NewDecoder(h.r.Body)
 	return decoder.Decode(b)
+}
+
+//VerifyKey function
+func (h *HTTPHandler) VerifyKey() error {
+	k := h.r.Header.Get("secret-key")
+	if k != os.Getenv("SECRET_KEY") {
+		return fmt.Errorf("Validasi gagal")
+	}
+	return nil
 }
