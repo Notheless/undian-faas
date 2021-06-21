@@ -9,11 +9,12 @@ import (
 func (c *Controller) LihatSemuaPemenang(w http.ResponseWriter, r *http.Request) {
 	http := util.NewHandler(w, r)
 
-	err := c.srv.LihatSemuaPemenang(r.Context())
+	res, err := c.srv.LihatSemuaPemenang(r.Context())
 
 	if err != nil {
 		http.ResponseError(err)
 		return
 	}
-	http.ResponseOK("OKE")
+	http.ResponseOK(res)
+
 }

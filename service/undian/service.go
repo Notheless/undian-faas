@@ -9,10 +9,11 @@ type (
 	// Service interface
 	Service interface {
 		GeneratePemenang(ctx context.Context, zona string, kategori string) ([]PemenangResult, error)
-		LihatPemenang(ctx context.Context, zona string, kategori string) ([]PemenangResult, error)
-		LihatSemuaPemenang(ctx context.Context) error
 		LihatSemuaKategori(ctx context.Context) ([]KategoriResult, error)
 		LihatSemuaZona(ctx context.Context) ([]string, error)
+		LihatPemenang(ctx context.Context, zona string, kategori string) ([]PemenangResult, error)
+		LihatPemenangZonasi(ctx context.Context, zona string) ([]PemenangZonaResult, error)
+		LihatSemuaPemenang(ctx context.Context) ([]PemenangSemuaResult, error)
 	}
 
 	service struct {
@@ -28,6 +29,17 @@ type (
 	PemenangResult struct {
 		Tiket    string `json:"tiket"`
 		NamaToko string `json:"nama_toko"`
+	}
+
+	PemenangZonaResult struct {
+		Kategori            string           `json:"kategori"`
+		KategoriDescription string           `json:"kategori_desc"`
+		Pemenang            []PemenangResult `json:"pemenang"`
+	}
+
+	PemenangSemuaResult struct {
+		Zona         string               `json:"zona"`
+		ZonaPemenang []PemenangZonaResult `json:"zona_pemenang"`
 	}
 )
 
