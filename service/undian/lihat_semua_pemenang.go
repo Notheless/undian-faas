@@ -15,7 +15,8 @@ func (s *service) LihatSemuaPemenang(ctx context.Context) ([]PemenangSemuaResult
 	FROM pemenang p 
 	JOIN tiket t ON p.tiket = t.nomor 
 	JOIN kategori k ON p.kategori = k.nama  
-	WHERE p.deleted = 0`
+	WHERE p.deleted = 0
+	ORDER BY t.zona ASC, p.kategori ASC`
 
 	rs, err := s.db.QueryContext(ctx, sql)
 	if err != nil {

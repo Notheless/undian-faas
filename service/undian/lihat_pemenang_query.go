@@ -37,7 +37,7 @@ func (s *service) LihatPemenangQuery(ctx context.Context, zonaQ []string, katego
 	WHERE p.deleted = 0
 	AND t.zona in (%s)
 	AND k.nama in (%s)
-	ORDER BY t.zona ASC, k.nama ASC`, zonaList, katList)
+	ORDER BY t.zona ASC, p.kategori ASC`, zonaList, katList)
 	fmt.Println(sql, param)
 
 	rs, err := s.db.QueryContext(ctx, sql, param...)
