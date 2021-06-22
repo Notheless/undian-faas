@@ -19,6 +19,8 @@ func NewController(srv undian.Service) *Controller {
 // Route func
 func (c *Controller) Route(r *mux.Router) {
 	s := r.PathPrefix("/undian").Subrouter()
+	s.HandleFunc("", c.LihatPemenangQuery).Methods("GET")
+	s.HandleFunc("", c.GeneratePemenangQuery).Methods("POST")
 	s.HandleFunc("/kategori", c.LihatSemuaKategori).Methods("GET")
 	s.HandleFunc("/zona", c.LihatSemuaZona).Methods("GET")
 	s.HandleFunc("/history", c.LihatSemuaPemenang).Methods("GET")

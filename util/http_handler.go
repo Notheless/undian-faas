@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -56,8 +57,8 @@ func (h *HTTPHandler) RouteValue(key string) string {
 }
 
 //QueryValue function
-func (h *HTTPHandler) QueryValue(key string) string {
-	return h.r.URL.Query().Get(key)
+func (h *HTTPHandler) QueryValue(key string) []string {
+	return strings.Split(h.r.URL.Query().Get(key), "|")
 }
 
 //BodyParse function

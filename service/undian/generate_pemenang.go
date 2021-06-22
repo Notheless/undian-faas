@@ -31,7 +31,7 @@ func (s *service) GeneratePemenang(ctx context.Context, zona string, kategori st
 
 	//get list peserta
 	listNomorUndian := []string{}
-	ambilNomorSQL := "SELECT t.nomor FROM tiket t WHERE t.zona  = ?"
+	ambilNomorSQL := "SELECT t.nomor FROM tiket t WHERE t.zona  = ? AND t.nomor NOT IN (SELECT p.tiket FROM pemenang p WHERE p.deleted = 0 AND p.zona = t.zona)"
 	rs, err := s.db.QueryContext(ctx, ambilNomorSQL, zona)
 	if err != nil {
 		return nil, err

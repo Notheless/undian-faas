@@ -14,6 +14,9 @@ type (
 		LihatPemenang(ctx context.Context, zona string, kategori string) ([]PemenangResult, error)
 		LihatPemenangZonasi(ctx context.Context, zona string) ([]PemenangZonaResult, error)
 		LihatSemuaPemenang(ctx context.Context) ([]PemenangSemuaResult, error)
+
+		LihatPemenangQuery(ctx context.Context, zonaQ []string, kategoriQ []string) ([]PemenangSemuaResult, error)
+		GeneratePemenangQuery(ctx context.Context, zonaQ []string, kategoriQ []string) ([]PemenangSemuaResult, error)
 	}
 
 	service struct {
@@ -40,6 +43,10 @@ type (
 	PemenangSemuaResult struct {
 		Zona         string               `json:"zona"`
 		ZonaPemenang []PemenangZonaResult `json:"zona_pemenang"`
+	}
+
+	temp struct {
+		Zona string
 	}
 )
 
