@@ -36,7 +36,6 @@ func (h *HTTPHandler) ResponseOK(body interface{}) {
 	payload, _ := json.Marshal(body)
 	h.w.Header().Set("Content-Type", contentTypeJSON)
 	if payload[0] == '"' {
-		fmt.Println(string(payload))
 		payload = []byte(fmt.Sprintf("%v", body))
 		h.w.Header().Set("Content-Type", contentTypeText)
 	}

@@ -16,6 +16,7 @@ type (
 		LihatSemuaPemenang(ctx context.Context) ([]PemenangSemuaResult, error)
 
 		LihatPemenangQuery(ctx context.Context, zonaQ []string, kategoriQ []string) ([]PemenangSemuaResult, error)
+		ExportExcel(ctx context.Context) (string, error)
 		GeneratePemenangQuery(ctx context.Context, zonaQ []string, kategoriQ []string) ([]PemenangSemuaResult, error)
 	}
 
