@@ -28,4 +28,5 @@ func (c *Controller) Route(r *mux.Router) {
 	s.HandleFunc("/{zona}", c.LihatPemenangZonasi).Methods("GET")
 	s.HandleFunc("/{zona}/{kategori}", c.LihatPemenang).Methods("GET")
 	s.HandleFunc("/{zona}/{kategori}", c.GeneratePemenang).Methods("POST")
+	s.HandleFunc("/clean-all", c.CleanPemenang).Methods("DELETE")
 }
