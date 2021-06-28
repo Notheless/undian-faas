@@ -27,13 +27,14 @@ func (s *service) LihatPemenangQuery(ctx context.Context, zonaQ []string, katego
 	}
 	sql := fmt.Sprintf(`SELECT 
 	t.nomor
-	, t.toko_id 
+	, t2.nama 
 	, k.nama  
 	, k.description 
 	, t.zona 
 	FROM pemenang p 
 	JOIN tiket t ON p.tiket = t.nomor 
 	JOIN kategori k ON p.kategori = k.nama  
+	LEFT JOIN toko t2 ON t.toko_id = t2.customer_id 
 	WHERE p.deleted = 0
 	AND t.zona in (%s)
 	AND k.nama in (%s)

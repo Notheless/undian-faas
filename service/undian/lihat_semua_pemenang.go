@@ -8,13 +8,14 @@ func (s *service) LihatSemuaPemenang(ctx context.Context) ([]PemenangSemuaResult
 	res := []PemenangSemuaResult{}
 	sql := `SELECT 
 	t.nomor
-	, t.toko_id 
+	, t2.nama 
 	, k.nama  
 	, k.description 
 	, t.zona 
 	FROM pemenang p 
 	JOIN tiket t ON p.tiket = t.nomor 
 	JOIN kategori k ON p.kategori = k.nama  
+	JOIN toko t2 ON t.toko_id = t2.customer_id 
 	WHERE p.deleted = 0
 	ORDER BY t.zona ASC, p.kategori ASC`
 
