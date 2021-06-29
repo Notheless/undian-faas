@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"math/rand"
+	"time"
 )
 
 func (s *service) GeneratePemenang(ctx context.Context, zona string, kategori string) ([]PemenangResult, error) {
@@ -46,11 +47,11 @@ func (s *service) GeneratePemenang(ctx context.Context, zona string, kategori st
 	listVal := ""
 	var listArg []interface{}
 	for i := 0; i < maksimalPemenang && len(listNomorUndian) != 0; i++ {
-		j := rand.Intn(len(listNomorUndian))
+		j := int64(rand.Intn(len(listNomorUndian))) * int64(rand.Intn(time.Now().Nanosecond())) % int64(len(listNomorUndian))
 		listArg = append(listArg, listNomorUndian[j])
 		listArg = append(listArg, kategori)
 		listArg = append(listArg, zona)
-		listNomorUndian = remove(listNomorUndian, j)
+		listNomorUndian = remove(listNomorUndian, int(j))
 		listVal += "(?, ?, ?),"
 	}
 	listVal = listVal[:len(listVal)-1]
